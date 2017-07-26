@@ -21,7 +21,15 @@ The painting mod comes with multiple canvases that can be painted (16x16, 32x32,
 So I suggest you remove the crafting recipes for the larger canvases from your copy of the painting mod or leave as is if you would still like to use the other canvas sizes for e.g. pictures on the wall or painted banners as nodes in the world.
 
 #### Banners on Player Skins
-You may not like the banner on the player skin. But please consider that you can leave the choice up to the player to simply remove the painted canvas from the amor inventory or leave it in if they like to have the banner on their player skin. You can also disable adding the overlay by implementing something similar to the shield overlay as that is removed when the shield is removed from the armor. Search for the playerShields variable in init.lua and copy the mechanism for chest plate, e.g. by adding and checking an addition playerChestplates array. Just make sure you check for the torso armor group (armor_torso ~= nil) on the registered tool. I will most likely add this as a configuration option later.
+You may not like the banner on the player skin. But please consider that you can leave the choice up to the player to simply remove the painted canvas from the amor inventory or leave it in if they like to have the banner on their player skin. If you still would like to disable the overlay when the chest plate is not worn, then you can set the overlayOnSkin variable to false in init.lua. The config works as follows (including shield for completeness sake):
+
+```
+               |  overlayOnSkin = true         |  overlayOnSkin = false
+No Chest Plate |  Chest plate banner is shown  |  Chest plate banner is not shown
+Chest Plate    |  Chest plate banner is shown  |  Chest plate banner is shown
+No Shield      |  Shield banner is not shown   |  Shield banner is not shown
+Shield         |  Shield banner is shown       |  Shield banner is shown 
+```
 
 #### Removing Shields
 You should be able to safely remove the shields mod as there are not hard references to it and it checks for the existence of the armor group property before doing anything else. So if you did not want shields in the first place, you can safely disable/ remove.
