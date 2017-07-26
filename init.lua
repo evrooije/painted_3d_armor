@@ -1,11 +1,19 @@
 local playerOverlays = {}
 local playerShields = {}
+local playerChestplates = {}
+
+-- Whether to overlay the banner on top of the player skin in case the player does not
+-- wear a chest plate. If true, the banner will be shown on top of the skin and the
+-- player will have to manually remove the painted canvas from the armor inventory. If
+-- false, no banner is shown on the player's torso when the chest plate is not worn
+local overlayOnSkin = true
 
 minetest.register_on_leaveplayer(function(player)
 	local name = player:get_player_name()
 	if name then
 		playerOverlays[name] = nil
 		playerShields[name] = nil
+		playerChestplates[name] = nil
 	end
 end)
 
@@ -63,6 +71,8 @@ armor:register_on_equip(
 				local tool = minetest.registered_tools[stack:get_name()]
 				if tool and tool.groups.armor_shield then
 					playerShields[player:get_player_name()] = true
+				elseif tool and tool.groups.armor_torso then
+					playerChestplates[player:get_player_name()] = true
 				end
 			end
 		end
@@ -82,8 +92,16 @@ armor:register_on_update(
 				local shield_overlay = "^"..to_imagestring(data.grid, data.res, 5, 5, 1)
 				local shield_preview_overlay = "^"..to_imagestring(data.grid, data.res, 23, 37, 1)
 
-				local total_overlay = chestplate_overlay
-				local total_preview_overlay = chestplate_preview_overlay
+				local total_overlay = ""
+				local total_preview_overlay = ""
+
+				if playerChestplates[name] then
+					total_overlay = chestplate_overlay
+					total_preview_overlay = chestplate_preview_overlay
+				elseif (not playerChestplates[name]) and overlayOnSkin then
+					total_overlay = chestplate_overlay
+					total_preview_overlay = chestplate_preview_overlay
+				end
 
 				if playerShields[name] then
 					total_overlay = total_overlay..shield_overlay
@@ -113,6 +131,8 @@ armor:register_on_unequip(
 				local tool = minetest.registered_tools[stack:get_name()]
 				if tool and tool.groups.armor_shield then
 					playerShields[player:get_player_name()] = nil
+				elseif tool and tool.groups.armor_torso then
+					playerChestplates[player:get_player_name()] = nil
 				end
 			end
 		end
