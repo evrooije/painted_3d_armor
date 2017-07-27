@@ -8,6 +8,9 @@ local playerChestplates = {}
 -- false, no banner is shown on the player's torso when the chest plate is not worn
 local overlayOnSkin = true
 
+local armorTextureSize = { w = 64, h = 32 }
+local armorPreviewTextureSize = { w = 32, h = 64 }
+
 minetest.register_on_leaveplayer(function(player)
 	local name = player:get_player_name()
 	if name then
@@ -43,14 +46,37 @@ for color, _ in pairs(textures) do
 	table.insert(revcolors, color)
 end
 
-minetest.register_craftitem("painted_3d_armor:armor_canvas", {
-	description = "Armor Canvas",
+minetest.register_craftitem("painted_3d_armor:armor_canvas_6x6", {
+	description = "Armor Canvas 6x6",
+	inventory_image = "default_paper.png",
+	stack_max = 99,
+})
+
+minetest.register_craftitem("painted_3d_armor:armor_canvas_12x12", {
+	description = "Armor Canvas 12x12",
+	inventory_image = "default_paper.png",
+	stack_max = 99,
+})
+
+minetest.register_craftitem("painted_3d_armor:armor_canvas_24x24", {
+	description = "Armor Canvas 24x24",
 	inventory_image = "default_paper.png",
 	stack_max = 99,
 })
 
 minetest.register_craft({
-	output = "painted_3d_armor:armor_canvas",
+	output = "painted_3d_armor:armor_canvas_6x6",
+	recipe = {
+		{ "default:paper", "default:paper", "" },
+		{ "default:paper", "default:paper", "" },
+		{ "", "default:paper", "" },
+	}
+})
+
+minetest.register_alias("painted_3d_armor:armor_canvas", "painted_3d_armor:armor_canvas_6x6")
+
+minetest.register_craft({
+	output = "painted_3d_armor:armor_canvas_12x12",
 	recipe = {
 		{ "default:paper", "default:paper", "default:paper" },
 		{ "default:paper", "default:paper", "default:paper" },
@@ -58,7 +84,18 @@ minetest.register_craft({
 	}
 })
 
-painting:register_canvas("painted_3d_armor:armor_canvas", 6)
+minetest.register_craft({
+	output = "painted_3d_armor:armor_canvas_24x24",
+	recipe = {
+		{ "default:paper", "default:paper", "default:paper" },
+		{ "default:paper", "default:paper", "default:paper" },
+		{ "", "default:paper", "default:paper" },
+	}
+})
+
+painting:register_canvas("painted_3d_armor:armor_canvas_6x6", 6)
+painting:register_canvas("painted_3d_armor:armor_canvas_12x12", 12)
+painting:register_canvas("painted_3d_armor:armor_canvas_24x24", 24)
 minetest.registered_craftitems["painting:paintedcanvas"].groups.armor_banner = 1
 
 armor:register_on_equip(
@@ -87,10 +124,10 @@ armor:register_on_update(
 			if stack then
 				local data = stack:get_metadata()
 				data = minetest.deserialize(data)
-				local chestplate_overlay = "^"..to_imagestring(data.grid, data.res, 21, 23, 1)
-				local chestplate_preview_overlay = "^"..to_imagestring(data.grid, data.res, 10, 22, 2)
-				local shield_overlay = "^"..to_imagestring(data.grid, data.res, 5, 5, 1)
-				local shield_preview_overlay = "^"..to_imagestring(data.grid, data.res, 23, 37, 1)
+				local chestplate_overlay = "^"..to_imagestring(data.grid, data.res, 21 * data.res / 6, 23 * data.res / 6, 1)
+				local chestplate_preview_overlay = "^"..to_imagestring(data.grid, data.res, 10 * data.res / 6, 22 * data.res / 6, 2)
+				local shield_overlay = "^"..to_imagestring(data.grid, data.res, 5 * data.res / 6, 5 * data.res / 6, 1)
+				local shield_preview_overlay = "^"..to_imagestring(data.grid, data.res, 23 * data.res / 6, 37 * data.res / 6, 1)
 
 				local total_overlay = ""
 				local total_preview_overlay = ""
@@ -112,10 +149,14 @@ armor:register_on_update(
 					print("Setting overlay on the texture")
 					default.player_set_textures(player, {
 						armor.textures[name].skin,
-						armor.textures[name].armor..total_overlay,
+						armor.textures[name].armor.."^[resize:"
+						..tostring(armorTextureSize.w * data.res / 6).."x"
+						..tostring(armorTextureSize.h * data.res / 6)..total_overlay,
 						armor.textures[name].wielditem,
 					})
-					armor.textures[name].preview = armor.textures[name].preview..total_preview_overlay
+					armor.textures[name].preview = armor.textures[name].preview.."^[resize:"
+						..tostring(armorPreviewTextureSize.w * data.res / 6).."x"
+						..tostring(armorPreviewTextureSize.h * data.res / 6)..total_preview_overlay
 				end
 			end
 		end
