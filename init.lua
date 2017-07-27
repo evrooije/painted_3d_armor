@@ -102,7 +102,6 @@ armor:register_on_equip(
 	function(player, index, stack)
 		if player then
 			if stack:get_name() == "painting:paintedcanvas" then
-				print("Setting stack in the player overlay")
 				playerOverlays[player:get_player_name()] = stack
 			else
 				local tool = minetest.registered_tools[stack:get_name()]
@@ -146,7 +145,6 @@ armor:register_on_update(
 				end
 
 				if armor.textures[name] then
-					print("Setting overlay on the texture")
 					default.player_set_textures(player, {
 						armor.textures[name].skin,
 						armor.textures[name].armor.."^[resize:"
