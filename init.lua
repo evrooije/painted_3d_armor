@@ -115,7 +115,7 @@ if banners then
 	)
 
 	minetest.register_craft({
-		output = "painted_3d_armor:armor_canvas_12x12",
+		output = "painted_3d_armor:banner_armor",
 		recipe = {
 			{ "default:paper", "default:paper", "default:paper" },
 			{ "default:paper", "banners:wooden_banner", "default:paper" },
