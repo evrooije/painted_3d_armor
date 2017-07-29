@@ -158,6 +158,27 @@ armor:register_on_update(
 	end
 )
 
+wieldview.update_wielded_item = function(self, player)
+	if not player then
+		return
+	end
+	local name = player:get_player_name()
+	local stack = player:get_wielded_item()
+	local item = stack:get_name()
+	if not item then
+		return
+	end
+	if self.wielded_item[name] then
+		if self.wielded_item[name] == item then
+			return
+		end
+		armor.textures[name].wielditem = self:get_item_texture(item)
+		armor:update_player_visuals(player)
+		armor:run_callbacks("on_update", player)
+	end
+	self.wielded_item[name] = item
+end
+
 function set_painting(player, stack)
 	local name = player:get_player_name()
 	local data = stack:get_metadata()
