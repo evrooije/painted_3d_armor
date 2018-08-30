@@ -130,6 +130,16 @@ armor:register_on_equip(
 		if player then
 			if	stack:get_name() == "painting:paintedcanvas" or stack:get_name() == "painted_3d_armor:banner_armor" then
 				playerOverlays[player:get_player_name()] = stack
+				if stack:get_name() == "painting:paintedcanvas" then
+					set_painting(player, stack)
+				elseif stack:get_name() == "painted_3d_armor:banner_armor" then
+					set_banner(player, stack)
+				end
+				minetest.after(0.1, function()
+					if player then
+						armor:update_player_visuals(player)
+					end
+				end)
 			else
 				local tool = minetest.registered_tools[stack:get_name()]
 				if tool and tool.groups.armor_shield then
@@ -157,27 +167,6 @@ armor:register_on_update(
 		end
 	end
 )
-
-wieldview.update_wielded_item = function(self, player)
-	if not player then
-		return
-	end
-	local name = player:get_player_name()
-	local stack = player:get_wielded_item()
-	local item = stack:get_name()
-	if not item then
-		return
-	end
-	if self.wielded_item[name] then
-		if self.wielded_item[name] == item then
-			return
-		end
-		armor.textures[name].wielditem = self:get_item_texture(item)
-		armor:update_player_visuals(player)
-		armor:run_callbacks("on_update", player)
-	end
-	self.wielded_item[name] = item
-end
 
 function set_painting(player, stack)
 	local name = player:get_player_name()
