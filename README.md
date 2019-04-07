@@ -2,16 +2,14 @@
 This mod bridges Hybrid Dog's version of the painting mod with stu's 3d_armor modpack and allows paintings to be used as a banner/ crest/ sigil/ coat of arms on your armor. How does it work? It adds an extra 6x6 painting canvas that can be placed on the easel and painted. The painting has been given an armor group so that it can be added to the detached armor inventory of 3d_armor. Once added there, the painting's texture is added as an overlay on the player's skin, on the chest plate if the player is wearing one and if the player holds a shield the image is placed on the shield as well.
 
 ### Installing
-Install the painting mod (https://github.com/evrooije/painting), the banners mod (https://github.com/shamoanjac/banners-mod), 3d_armor (https://github.com/stujones11/minetest-3d_armor) and this mod by downloading them as zip or cloning, e.g.:
+Install the painting mod (https://github.com/evrooije/painting), the banners mod (https://github.com/evrooije/banners), 3d_armor (https://github.com/stujones11/minetest-3d_armor) and this mod by downloading them as zip or cloning, e.g.:
 
 ```
 git clone https://github.com/evrooije/painting
-git clone https://github.com/shamoanjac/banners-mod banners
+git clone https://github.com/evrooije/banners
 git clone https://github.com/stujones11/minetest-3d_armor
 git clone https://github.com/evrooije/painted_3d_armor
 ```
-
-NOTE: banners-mod must be named banners so either do the above git clone into banners or move/ rename the banners-mod folder to banners.
 
 Once installed you now have the painting mod's easel and canvases at your disposal, as well as a special armor banner. To use painting, craft an easel and then craft the 6x6 armor canvas as per the crafting recipes. Place the easel and left click the easel with the armor canvas. Craft the brushes for the colors you need and start painting by right clicking on the canvas. Once done, walk to the side or the back of the canvas and dig it (digging it from the front does not work as the painting mod places an entity there which blocks digging).
 
